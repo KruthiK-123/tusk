@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Windchill BOM Details</title>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/material-components-web/4.0.0/material-components-web.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/dataTables.material.min.css">
+
+ 
+
+<script>
+
+ 
+
+$(document).ready(function () {
+var temp;
+
+ 
+
+$.ajax({
+  "url": "http://bltsp00509.lnties.com/Windchill/servlet/odata/ProdMgmt/Parts('VR:wt.part.WTPart:84875')/PTC.ProdMgmt.GetBOM?$expand=Components($expand=Part($select=*),PartUse,Occurrences;$levels=1)",
+  "method": "POST",
+  "timeout": 0,
+  "headers": {
+    "Access-Control-Allow-Origin": "*",
+    "Accept":"application/json",
+    "Access-Control-Allow-Credentials":"true",
+    "CSRF_NONCE": "5SCYHsiz32iJvRZqlWfZMfzXugTq/ngDkVDbU7nEtS3ZkmEbixDLb43jmA/zzVA7sQuqJ73ZvFWzjCBa0BGvLP2A7F68jSw7pGXeT47XvAW50UQF1EP/aL/WqyvugCs=",
+    "Content-Type": "Application/json",
+    "Authorization": "Basic " + btoa('wcadmin' + ":" + 'wcadmin')
+   
+  },
+  //"data": "{\"NavigationCriteriaId\" : \"OR:wt.filter.NavigationCriteria:144191\"}",
+  "data": "{}",
+})
+.done(function (response) {
+ 
+    console.log(response.Components);
+ 
+      var table = $('#basic').DataTable({
+
+ 
+
+        data:response.Components,
+        columns: [
+          { data: "PartNumber" },
+          { data: "PartName" },
+          { data: "PathId"},
+          { data: "PartUse.Quantity" },
+          { data: "PartUse.LineNumber" },
+          { data: "PartUse.PartOccurrenceAssignedExpression" },
+        ],
+       
+      });
+      console.log(response.PartName);
+});
+});
+</script>
+</head>
+<body>
+  <h3>Windchill BOM Details</h3>
+<table id="basic"  class="display  table thead-dark table-striped" cellspacing="0" width="100%">
+  <thead>
+  <tr>
+    <th>Part Number</th>
+    <th>Part Name</th>
+    <th>PathId</th>
+    <th>Quantity</th>
+    <th>LineNumber</th>
+    <th>PartOccurrenceAssignedExpression</th>
+  </tr>
+</thead>
+</table>
+
+ 
+
+</body>
+</html>
